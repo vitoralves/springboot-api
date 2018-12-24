@@ -1,4 +1,4 @@
-package com.springbootpai.entities;
+package com.springbootapi.entities;
 
 import java.io.Serializable;
 
