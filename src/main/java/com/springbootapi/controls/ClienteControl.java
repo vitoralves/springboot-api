@@ -63,7 +63,7 @@ public class ClienteControl {
 	 * @return
 	 */
 	@GetMapping(path = "id")
-	public ResponseEntity<Response<ClienteDTO>> get(@RequestParam(value = "id") Long id) {
+	public ResponseEntity<Response<ClienteDTO>> get(@RequestParam(value = "cliente") Long id) {
 
 		log.info("Buscando cliente de id " + id);
 		Response<ClienteDTO> response = new Response<ClienteDTO>();
@@ -117,6 +117,7 @@ public class ClienteControl {
 		}
 		
 		if (result.hasErrors()) {
+			result.getAllErrors().forEach(f -> response.getErrors().add(f.getDefaultMessage()));
 			return ResponseEntity.badRequest().body(response);
 		}
 		
