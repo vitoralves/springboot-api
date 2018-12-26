@@ -72,8 +72,8 @@ public class ClienteControl {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(path = "id")
-	public ResponseEntity<Response<ClienteDTO>> get(@RequestParam(value = "cliente") Long id) {
+	@GetMapping(path = "id/{cliente}")
+	public ResponseEntity<Response<ClienteDTO>> get(@PathVariable("cliente") Long id) {
 
 		log.info("Buscando cliente de id " + id);
 		Response<ClienteDTO> response = new Response<ClienteDTO>();
