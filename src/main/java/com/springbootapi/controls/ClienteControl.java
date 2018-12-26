@@ -157,33 +157,34 @@ public class ClienteControl {
 			result.getAllErrors().forEach(f -> response.getErrors().add(f.getDefaultMessage()));
 			return ResponseEntity.badRequest().body(response);
 		}
-		
+
 		Cliente cli = service.save(this.convertDtoToEntity(dto));
-		//passa o ip e o id do cliente criado para buscar informações de temperatura
+		// passa o ip e o id do cliente criado para buscar informações de temperatura
 		this.saveTemperature(request.getRemoteAddr(), cli.getId());
-		
+
 		response.setData(this.convertEntityToDto(cli));
 		return ResponseEntity.ok(response);
 	}
 
 	private void saveTemperature(String ip, Long cliente) {
-		//busca informações do ip da base https://ipvigilante.com/
+		log.info("IP da requisição " + ip);
+		// busca informações do ip da base https://ipvigilante.com/
 		Object[] obj = Util.getCoordinatesFromIp(ip);
-		//buscar o id de posicionamento na terra pelas coordenadas
+		// buscar o id de posicionamento na terra pelas coordenadas
 		String woeid = Util.getPositionOnEarthByCoordinates(obj[0].toString(), obj[1].toString());
-		//com o woeaid busca informações do clima
+		// com o woeaid busca informações do clima
 		Object[] temp = Util.getWheater(woeid);
-		
+
 		log.info("Salvando temperaturas " + temp[0] + " e " + temp[1]);
-		
+
 		Weather w = new Weather();
 		w.setMaxTemp(Double.valueOf(temp[0].toString()));
 		w.setMinTemp(Double.valueOf(temp[1].toString()));
 		w.setCliente(new Cliente());
 		w.getCliente().setId(cliente);
 		log.info(w.toString());
-		
-		weatherService.save(w);		
+
+		weatherService.save(w);
 	}
 
 	private Cliente convertDtoToEntity(ClienteDTO dto) {
