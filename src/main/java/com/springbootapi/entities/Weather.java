@@ -2,6 +2,7 @@ package com.springbootapi.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,6 +32,6 @@ public class Weather implements Serializable{
 	@Column(name = "min_temp")
 	private Double minTemp;
 	@JoinColumn(name = "cliente", referencedColumnName = "id")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Cliente cliente;
 }
