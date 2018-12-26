@@ -70,7 +70,7 @@ public class ClienteControlTest {
 		Cliente c = this.getCliente();
 		BDDMockito.given(this.service.findById(Mockito.anyLong())).willReturn(Optional.of(c));
 
-		mvc.perform(MockMvcRequestBuilders.get(URL + "/id?cliente=" + ID).content(this.getJsonPost())
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/id/" + ID).content(this.getJsonPost())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.data.id").value(ID)).andExpect(jsonPath("$.data.nome").value(NOME))
 				.andExpect(jsonPath("$.data.idade").value(IDADE)).andExpect(jsonPath("$.errors").isEmpty());
@@ -80,7 +80,7 @@ public class ClienteControlTest {
 	public void testGetByIdInexistent() throws Exception {
 		BDDMockito.given(this.service.findById(Mockito.anyLong())).willReturn(Optional.empty());
 
-		mvc.perform(MockMvcRequestBuilders.get(URL + "/id?cliente=" + ID).content(this.getJsonPost())
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/id/" + ID).content(this.getJsonPost())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.errors").value("Cliente de id " + ID + " não encontrado."));
