@@ -45,6 +45,7 @@ public class Util {
 
 	/**
 	 * Retorna id de posição na terra passando latitude e longitude da localização
+	 * O primeiro resultado será o resultado mais próxima das coordenadas enviadas
 	 * 
 	 * @param lat
 	 * @param lon
@@ -70,9 +71,13 @@ public class Util {
 		return "";
 	}
 
-	
+	/**
+	 * Busca informações sobre o clima o primeiro resultado será da data atual
+	 * @param woeid
+	 * @return
+	 */
 	public static Object[] getWheater(String woeid) {
-		Object[] obj = {"", ""};
+		Object[] obj = {0.0, 0.0};
 		
 		try {
 			String uri = "https://www.metaweather.com/api/location/" + woeid;

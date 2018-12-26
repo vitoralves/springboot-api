@@ -44,6 +44,7 @@ public class WeatherControlTest {
 
 	private static final String URL = "/api/weather";
 	private static final Long ID = 1L;
+	private static final Long CLIENTEID = 2L;
 	private static final Double MAXTEMP = 50.0;
 	private static final Double MINTEMP = 20.56;
 
@@ -52,21 +53,21 @@ public class WeatherControlTest {
 		Weather c = this.getWeather();
 		BDDMockito.given(this.service.findByClienteId(Mockito.anyLong())).willReturn(Optional.of(c));
 
-		mvc.perform(MockMvcRequestBuilders.get(URL + "/cliente/" + ID).content(this.getJsonPost())
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/cliente/" + CLIENTEID).content(this.getJsonPost())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.data.id").value(ID)).andExpect(jsonPath("$.data.maxTemp").value(MAXTEMP))
-				.andExpect(jsonPath("$.data.minTemp").value(MINTEMP)).andExpect(jsonPath("$.data.cliente").value(ID))
-				.andExpect(jsonPath("$.errors").isEmpty());
+				.andExpect(jsonPath("$.data.minTemp").value(MINTEMP))
+				.andExpect(jsonPath("$.data.cliente").value(CLIENTEID)).andExpect(jsonPath("$.errors").isEmpty());
 	}
 
 	@Test
 	public void testFindByClienteIdInvalid() throws Exception {
 		BDDMockito.given(this.service.findByClienteId(Mockito.anyLong())).willReturn(Optional.empty());
 
-		mvc.perform(MockMvcRequestBuilders.get(URL + "/cliente/" + ID).content(this.getJsonPost())
+		mvc.perform(MockMvcRequestBuilders.get(URL + "/cliente/" + CLIENTEID).content(this.getJsonPost())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.errors").value("Nada encontrado para cliente " + ID));
+				.andExpect(jsonPath("$.errors").value("Nada encontrado para cliente " + CLIENTEID));
 	}
 
 	@Test
@@ -81,7 +82,7 @@ public class WeatherControlTest {
 				.andExpect(jsonPath("$.data.content[0].id").value(ID))
 				.andExpect(jsonPath("$.data.content[0].maxTemp").value(MAXTEMP))
 				.andExpect(jsonPath("$.data.content[0].minTemp").value(MINTEMP))
-				.andExpect(jsonPath("$.data.content[0].cliente").value(ID))
+				.andExpect(jsonPath("$.data.content[0].cliente").value(CLIENTEID))
 				.andExpect(jsonPath("$.errors").isEmpty());
 	}
 
@@ -90,7 +91,7 @@ public class WeatherControlTest {
 		dto.setId(ID);
 		dto.setMaxTemp(MAXTEMP);
 		dto.setMinTemp(MINTEMP);
-		dto.setCliente(ID);
+		dto.setCliente(CLIENTEID);
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(dto);
@@ -102,7 +103,7 @@ public class WeatherControlTest {
 		c.setMaxTemp(MAXTEMP);
 		c.setMinTemp(MINTEMP);
 		c.setCliente(new Cliente());
-		c.getCliente().setId(ID);
+		c.getCliente().setId(CLIENTEID);
 
 		return c;
 	}

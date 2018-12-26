@@ -71,7 +71,7 @@ public class WeatherControl {
 	private WeatherDTO convertEntityToDto(Weather c) {
 		WeatherDTO dto = new WeatherDTO();
 		dto.setId(c.getId());
-		dto.setCliente(c.getId());
+		dto.setCliente(c.getCliente().getId());
 		dto.setMaxTemp(c.getMaxTemp());
 		dto.setMinTemp(c.getMinTemp());
 
