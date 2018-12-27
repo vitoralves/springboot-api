@@ -170,21 +170,24 @@ public class ClienteControl {
 		log.info("IP da requisição " + ip);
 		// busca informações do ip da base https://ipvigilante.com/
 		Object[] obj = Util.getCoordinatesFromIp(ip);
-		// buscar o id de posicionamento na terra pelas coordenadas
-		String woeid = Util.getPositionOnEarthByCoordinates(obj[0].toString(), obj[1].toString());
-		// com o woeaid busca informações do clima
-		Object[] temp = Util.getWheater(woeid);
+		//verifica se é um ip válido
+		if (obj[0] != "" && obj[1] != "") {
+			// buscar o id de posicionamento na terra pelas coordenadas
+			String woeid = Util.getPositionOnEarthByCoordinates(obj[0].toString(), obj[1].toString());
+			// com o woeaid busca informações do clima
+			Object[] temp = Util.getWheater(woeid);
 
-		log.info("Salvando temperaturas " + temp[0] + " e " + temp[1]);
+			log.info("Salvando temperaturas " + temp[0] + " e " + temp[1]);
 
-		Weather w = new Weather();
-		w.setMaxTemp(Double.valueOf(temp[0].toString()));
-		w.setMinTemp(Double.valueOf(temp[1].toString()));
-		w.setCliente(new Cliente());
-		w.getCliente().setId(cliente);
-		log.info(w.toString());
+			Weather w = new Weather();
+			w.setMaxTemp(Double.valueOf(temp[0].toString()));
+			w.setMinTemp(Double.valueOf(temp[1].toString()));
+			w.setCliente(new Cliente());
+			w.getCliente().setId(cliente);
+			log.info(w.toString());
 
-		weatherService.save(w);
+			weatherService.save(w);
+		}
 	}
 
 	private Cliente convertDtoToEntity(ClienteDTO dto) {

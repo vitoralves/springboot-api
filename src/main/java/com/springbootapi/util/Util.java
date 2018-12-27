@@ -19,12 +19,12 @@ public class Util {
 	 */
 	public static Object[] getCoordinatesFromIp(String ip) {
 		Object[] obj = { "", "" };
+		String uri = "https://ipvigilante.com/" + ip;
+
+		RestTemplate restTemplate = new RestTemplate();
+		String result = "";
 		try {
-			String uri = "https://ipvigilante.com/" + ip;
-
-			RestTemplate restTemplate = new RestTemplate();
-			String result = restTemplate.getForObject(uri, String.class);
-
+			result = restTemplate.getForObject(uri, String.class);
 			ObjectMapper mapper = new ObjectMapper();
 
 			JsonNode actualObj = mapper.readTree(result);
@@ -36,16 +36,17 @@ public class Util {
 
 			obj[0] = latitude.asText();
 			obj[1] = longitude.asText();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return obj;
 	}
 
 	/**
-	 * Retorna id de posição na terra passando latitude e longitude da localização
-	 * O primeiro resultado será o resultado mais próxima das coordenadas enviadas
+	 * Retorna id de posição na terra passando latitude e longitude da localização O
+	 * primeiro resultado será o resultado mais próxima das coordenadas enviadas
 	 * 
 	 * @param lat
 	 * @param lon
@@ -60,7 +61,7 @@ public class Util {
 
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode actualObj = mapper.readTree(result);
-			
+
 			List<String> l = actualObj.findValuesAsText("woeid");
 
 			return l.get(0);
@@ -73,15 +74,16 @@ public class Util {
 
 	/**
 	 * Busca informações sobre o clima o primeiro resultado será da data atual
+	 * 
 	 * @param woeid
 	 * @return
 	 */
 	public static Object[] getWheater(String woeid) {
-		Object[] obj = {0.0, 0.0};
-		
+		Object[] obj = { 0.0, 0.0 };
+
 		try {
 			String uri = "https://www.metaweather.com/api/location/" + woeid;
-			
+
 			RestTemplate restTemplate = new RestTemplate();
 			String result = restTemplate.getForObject(uri, String.class);
 
@@ -89,7 +91,7 @@ public class Util {
 			JsonNode actualObj = mapper.readTree(result);
 
 			JsonNode firstNode = actualObj.get("consolidated_weather").get(0);
-			
+
 			obj[0] = firstNode.get("max_temp");
 			obj[1] = firstNode.get("min_temp");
 		} catch (IOException e) {

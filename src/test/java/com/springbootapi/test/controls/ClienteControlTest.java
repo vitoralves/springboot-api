@@ -18,16 +18,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springbootapi.dtos.ClienteDTO;
 import com.springbootapi.entities.Cliente;
+import com.springbootapi.entities.Weather;
 import com.springbootapi.services.ClienteService;
+import com.springbootapi.services.WeatherService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -40,6 +44,8 @@ public class ClienteControlTest {
 
 	@MockBean
 	private ClienteService service;
+	@MockBean
+	private WeatherService weatherService;
 
 	private static final String URL = "/api/cliente";
 	private static final Long ID = 1L;
@@ -119,6 +125,28 @@ public class ClienteControlTest {
 				.andExpect(jsonPath("$.errors").value("Cliente de id " + ID + " não encontrado."));
 	}
 
+	@Test
+	public void testCreate() throws Exception {
+		Cliente c = this.getCliente();
+		BDDMockito.given(this.service.save(Mockito.any(Cliente.class))).willReturn(c);
+		BDDMockito.given(this.weatherService.save(Mockito.any(Weather.class))).willReturn(new Weather());		
+
+		mvc.perform(MockMvcRequestBuilders.post(URL).with(remoteAddr("8.8.8.8")).content(this.getJsonPost())
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.data.id").value(ID)).andExpect(jsonPath("$.data.nome").value(NOME))
+				.andExpect(jsonPath("$.data.idade").value(IDADE)).andExpect(jsonPath("$.errors").isEmpty());
+	}
+	
+	@Test
+	public void testCreateInvalidCliente() throws Exception {
+		Cliente c = new Cliente();
+		ObjectMapper mapper = new ObjectMapper();
+		String content = mapper.writeValueAsString(c);
+		
+		mvc.perform(MockMvcRequestBuilders.post(URL).content(content)
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest());
+	}
+
 	private String getJsonPost() throws JsonProcessingException {
 		ClienteDTO dto = new ClienteDTO();
 		dto.setId(ID);
@@ -136,5 +164,15 @@ public class ClienteControlTest {
 		c.setNome(NOME);
 
 		return c;
+	}
+
+	private static RequestPostProcessor remoteAddr(final String remoteAddr) {
+		return new RequestPostProcessor() {
+			@Override
+			public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+				request.setRemoteAddr(remoteAddr);
+				return request;
+			}
+		};
 	}
 }

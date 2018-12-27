@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class ClienteDTO {
 	private Long id;
-	@Length(max = 100, message = "O nome não pode ter mais de 100 caracteres")
+	@Length(min = 3, max = 100, message = "O nome deve ser composto de no mínimo 3 e no máximo 100 caracteres")
 	private String nome;
 	@NotNull(message = "Informe a idade")
 	private Integer idade;
