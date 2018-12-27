@@ -8,10 +8,12 @@ O projeto possui as seguintes características:
 * Projeto criado com Spring Boot e Java 8
 * Banco de dados Postgres com JPA e Spring Data JPA
 * Versionamento de banco de dados com Flyway
-* Testes com JUnit e Mockito
+* Testes com JUnit e Mockito com banco H2 em memória
 * Caching com EhCache
 * Nuvem do Heroku
 * Integração contínua com TravisCI
+* Project Lombok
+* Documentação dos endpoints com Swagger
 ### Como executar a aplicação
 Certifique-se de ter o Maven instalado e adicionado ao PATH de seu sistema operacional, assim como o Git.
 ```
@@ -31,6 +33,12 @@ O pacote será gerado dentro da pasta target, basta executá-lo com o comando ab
 
 ```
 java -jar -Dspring.profiles.active=prod -Dserver.port=443 SpringbootApi-0.0.1-SNAPSHOT.jar
+```
+### Como executar os testes
+Os testes podem ser executados com o seguinte comando:
+
+```
+mvn test
 ```
 ### Documentação
 Utilize a interface do Swagger para ter acesso a documentação dos endpoints, ela está disponível na url http://localhost:8080/swagger-ui.html
