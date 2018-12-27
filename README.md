@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vitoralves/springboot-api.svg?branch=master)](https://travis-ci.org/vitoralves/springboot-api)
+
 # Springboot RESTful API
 API responsável por manipular clientes com os atributos nome e idade e através do IP do usuário que fizer uma requisição para inserir um novo cliente salvar a temperatura máxima e mínima da localização mais próxima do usuário, utilizando as api's abertas https://www.ipvigilante.com/ e https://www.metaweather.com/api/
 
