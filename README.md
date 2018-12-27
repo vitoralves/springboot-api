@@ -14,8 +14,9 @@ O projeto possui as seguintes características:
 * Integração contínua com TravisCI
 * Project Lombok
 * Documentação dos endpoints com Swagger
+* Segurança da API com autenticação via tokens JWT
 ### Como executar a aplicação
-Certifique-se de ter o Maven instalado e adicionado ao PATH de seu sistema operacional, assim como o Git.
+Certifique-se de ter o Maven instalado e adicionado ao PATH de seu sistema operacional, assim como o Git, crie um banco de dados no postgres e altere o arquivo application.properties informando as credenciais para o aplicação acessar a base de dados, não se preocupe com a criação das tabelas, o flyway se encarregará dessa função.
 ```
 git clone https://github.com/vitoralves/springboot-api.git
 cd SpringbootApi
@@ -34,6 +35,18 @@ O pacote será gerado dentro da pasta target, basta executá-lo com o comando ab
 ```
 java -jar -Dspring.profiles.active=prod -Dserver.port=443 SpringbootApi-0.0.1-SNAPSHOT.jar
 ```
+### Como autenticar na API
+Antes de fazer requisições nos endpoint você deve estar autenticado, para esse projeto não foi criado nenhum controle de usuário, já existe um usuário de testes previamente cadastrado.
+Para autenticar faça uma requisição POST na rota /auth com os dados:
+
+```
+{
+  "usuario": "admin",
+  "senha": "123"
+}
+```
+
+Você receberá um token do tipo Bearer que deve ser enviado no cabeçalho das requisições.
 ### Como executar os testes
 Os testes podem ser executados com o seguinte comando:
 
