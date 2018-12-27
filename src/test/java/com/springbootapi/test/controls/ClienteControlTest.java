@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,6 +54,7 @@ public class ClienteControlTest {
 	private static final Integer IDADE = 30;
 
 	@Test
+	@WithMockUser
 	public void testUpdate() throws Exception {
 		Cliente c = this.getCliente();
 		BDDMockito.given(this.service.save(Mockito.any(Cliente.class))).willReturn(c);
@@ -65,6 +67,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testUpdateClienteInexistent() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.put(URL).content(this.getJsonPost()).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
@@ -72,6 +75,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testGetById() throws Exception {
 		Cliente c = this.getCliente();
 		BDDMockito.given(this.service.findById(Mockito.anyLong())).willReturn(Optional.of(c));
@@ -83,6 +87,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testGetByIdInexistent() throws Exception {
 		BDDMockito.given(this.service.findById(Mockito.anyLong())).willReturn(Optional.empty());
 
@@ -93,6 +98,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testFindAll() throws Exception {
 		Cliente c = this.getCliente();
 		List<Cliente> l = new ArrayList<>();
@@ -107,6 +113,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testDelete() throws JsonProcessingException, Exception {
 		BDDMockito.given(this.service.findById(Mockito.anyLong())).willReturn(Optional.of(new Cliente()));
 
@@ -116,6 +123,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testDeleteInexistente() throws JsonProcessingException, Exception {
 		BDDMockito.given(this.service.findById(Mockito.anyLong())).willReturn(Optional.empty());
 
@@ -126,6 +134,7 @@ public class ClienteControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testCreate() throws Exception {
 		Cliente c = this.getCliente();
 		BDDMockito.given(this.service.save(Mockito.any(Cliente.class))).willReturn(c);
@@ -138,6 +147,7 @@ public class ClienteControlTest {
 	}
 	
 	@Test
+	@WithMockUser
 	public void testCreateInvalidCliente() throws Exception {
 		Cliente c = new Cliente();
 		ObjectMapper mapper = new ObjectMapper();

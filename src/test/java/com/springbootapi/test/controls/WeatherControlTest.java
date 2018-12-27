@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,6 +50,7 @@ public class WeatherControlTest {
 	private static final Double MINTEMP = 20.56;
 
 	@Test
+	@WithMockUser
 	public void testFindByClienteId() throws Exception {
 		Weather c = this.getWeather();
 		BDDMockito.given(this.service.findByClienteId(Mockito.anyLong())).willReturn(Optional.of(c));
@@ -61,6 +63,7 @@ public class WeatherControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testFindByClienteIdInvalid() throws Exception {
 		BDDMockito.given(this.service.findByClienteId(Mockito.anyLong())).willReturn(Optional.empty());
 
@@ -71,6 +74,7 @@ public class WeatherControlTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void testFindAll() throws Exception {
 		Weather c = this.getWeather();
 		List<Weather> l = new ArrayList<>();
