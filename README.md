@@ -16,7 +16,7 @@ O projeto possui as seguintes características:
 * Documentação dos endpoints com Swagger
 * Segurança da API com autenticação via tokens JWT
 ### Como executar a aplicação
-Certifique-se de ter o Maven instalado e adicionado ao PATH de seu sistema operacional, assim como o Git, crie um banco de dados no postgres e altere o arquivo application.properties informando as credenciais para o aplicação acessar a base de dados, não se preocupe com a criação das tabelas, o flyway se encarregará dessa função.
+Certifique-se de ter o Maven instalado e adicionado ao PATH de seu sistema operacional, assim como o Git, crie um banco de dados no postgres e altere o arquivo application.properties informando as credenciais para a aplicação acessar a base de dados, não se preocupe com a criação das tabelas, o flyway se encarregará dessa função.
 ```
 git clone https://github.com/vitoralves/springboot-api.git
 cd SpringbootApi
@@ -31,6 +31,7 @@ mvn clean install
 ```
 
 O pacote será gerado dentro da pasta target, basta executá-lo com o comando abaixo, não esquecendo de configurar qual o profile e a porta que a aplicação deverá utilizar.
+Também é necessário criar uma variável de ambiente com as credenciais de acesso ao banco de dados com o nome $DATABASE_URL ou alterar o arquivo application-prod.properties.
 
 ```
 java -jar -Dspring.profiles.active=prod -Dserver.port=443 SpringbootApi-0.0.1-SNAPSHOT.jar
